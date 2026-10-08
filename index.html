@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1016">
+<meta name="description" content="PFx Shadow Studio — precise CSS shadows, built your way.">
+<title>PFx Shadow Studio</title>
+<link rel="stylesheet" href="./src/ui/style.css">
+<script type="module" src="./src/ui/app.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="PFx Shadow Studio home"><span class="brandmark">pfx</span><span class="brandname">Shadow Studio</span><span class="version">ALPHA 0.1</span></a>
+    <div class="top-actions"><span class="status"><i></i>Local editor</span><button id="reset" class="button ghost">Reset</button><button id="theme" class="button icon-button" aria-label="Toggle theme">◐</button><button id="copyTop" class="button primary">Copy CSS <span aria-hidden="true">↗</span></button></div>
+  </header>
+  <main class="workspace">
+    <aside class="panel left" aria-label="Shadow layers">
+      <div class="panel-heading"><div><span class="eyebrow">WORKSPACE / 01</span><h2>Layers</h2></div><button id="add" class="round-add" title="Add layer" aria-label="Add layer">+</button></div>
+      <p class="muted short">Build depth one layer at a time.</p>
+      <label class="field-label" for="kind">SHADOW TYPE</label>
+      <select id="kind" class="select"><option value="box">Box shadow</option><option value="text">Text shadow</option><option value="drop">Drop shadow</option></select>
+      <div class="stack-header"><span>STACK</span><span id="count">1 LAYER</span></div>
+      <div id="layers" class="layer-list"></div>
+      <div class="panel-footer"><button id="undo" class="button ghost">↶ Undo</button><button id="redo" class="button ghost">↷ Redo</button></div>
+    </aside>
+    <section class="stage" aria-label="Live shadow preview">
+      <div class="stage-header"><div><span class="eyebrow">LIVE CANVAS</span><h1>Shape the shadow.</h1><p>Precision, in every layer.</p></div><div class="chip">● LIVE PREVIEW</div></div>
+      <div class="stage-toolbar"><div class="segmented" role="group" aria-label="Preview target"><button class="active" data-preview="card">Card</button><button data-preview="button">Button</button><button data-preview="text">Text</button></div><div class="preview-colors"><button data-background="light" class="swatch light active" aria-label="Light canvas"></button><button data-background="dark" class="swatch dark" aria-label="Dark canvas"></button><button data-background="color" class="swatch lilac" aria-label="Colored canvas"></button></div></div>
+      <div id="canvas" class="canvas" data-background="light"><div class="canvas-grid"></div><div id="preview" class="preview-card"><div id="previewContent"><span class="preview-kicker">PFx / SHADOW EXPERIMENT</span><strong>Depth is a detail.</strong><small>Beautiful interfaces start here.</small></div></div><span class="canvas-corner">100% · CSS NATIVE</span></div>
+      <div class="output"><div class="output-top"><div><span class="eyebrow">EXPORT / CSS</span><h2>Production-ready syntax</h2></div><button id="copy" class="button secondary">Copy code ↗</button></div><pre id="code"></pre></div>
+    </section>
+    <aside class="panel right" aria-label="Selected layer controls"><div class="panel-heading"><div><span class="eyebrow">INSPECTOR / 02</span><h2>Properties</h2></div><span class="tiny-icon">⚙</span></div><p id="selectedName" class="muted short">Layer 01 / Active</p>
+      <div id="controls">
+        <div class="control" data-control="x"><div><label for="x">Horizontal offset</label><output id="xValue">0 px</output></div><input id="x" type="range" min="-100" max="100" step="1"></div>
+        <div class="control" data-control="y"><div><label for="y">Vertical offset</label><output id="yValue">8 px</output></div><input id="y" type="range" min="-100" max="100" step="1"></div>
+        <div class="control" data-control="blur"><div><label for="blur">Blur radius</label><output id="blurValue">24 px</output></div><input id="blur" type="range" min="0" max="160" step="1"></div>
+        <div class="control" data-control="spread"><div><label for="spread">Spread radius</label><output id="spreadValue">0 px</output></div><input id="spread" type="range" min="-80" max="80" step="1"></div>
+        <div class="control" data-control="alpha"><div><label for="alpha">Opacity</label><output id="alphaValue">15%</output></div><input id="alpha" type="range" min="0" max="1" step=".01"></div>
+        <div class="color-row"><label for="color">Shadow color</label><input id="color" type="color" value="#000000"><output id="colorValue">#000000</output></div>
+        <label class="toggle-row" id="insetRow"><span>Inner shadow <small>Inset mode</small></span><input type="checkbox" id="inset" role="switch"></label>
+      </div>
+      <div class="import-area"><label for="import">IMPORT CSS</label><textarea id="import" rows="3" spellcheck="false" placeholder="box-shadow: 0 8px 24px rgb(0 0 0 / 0.15);"></textarea><button id="apply" class="button secondary full">Apply CSS</button><p id="message" role="status" aria-live="polite"></p></div>
+    </aside>
+  </main>
+  <footer class="bottom"><span>PFx Shadow Studio © 2026</span><span>Zero dependencies <span class="separator">/</span> Built with native web technology</span></footer>
+</div>
+</body></html>
