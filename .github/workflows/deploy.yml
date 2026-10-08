@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,6 +22,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout site
         uses: actions/checkout@v4
@@ -34,3 +35,55 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify live website and asset delivery
+        id: live
+        if: steps.deployment.outcome == 'success'
+        continue-on-error: true
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${SITE_URL%/}/"
+          for attempt in $(seq 1 12); do
+            if curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}index.html" -o /tmp/pfx-index.html &&
+               curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}src/ui/app.js" -o /tmp/pfx-app.js &&
+               curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}src/ui/style.css" -o /tmp/pfx-style.css &&
+               curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}assets/pfx-logo.svg" -o /tmp/pfx-logo.svg &&
+               grep -q 'PFx Shadow Studio' /tmp/pfx-index.html &&
+               grep -q 'createHistory' /tmp/pfx-app.js &&
+               grep -q '\.workspace' /tmp/pfx-style.css &&
+               cmp -s assets/pfx-logo.svg /tmp/pfx-logo.svg; then
+              echo "LIVE CHECK PASSED: HTML, JS, CSS and supplied logo at $base"
+              exit 0
+            fi
+            echo "Live site not yet in sync: attempt $attempt/12"
+            sleep 5
+          done
+          echo "Live site verification failed"
+          exit 1
+      - name: Record deployment status
+        if: always() && github.event_name == 'push'
+        shell: bash
+        env:
+          DEPLOY: ${{ steps.deployment.outcome }}
+          LIVE: ${{ steps.live.outcome }}
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          mkdir -p verification
+          {
+            echo "Commit: $GITHUB_SHA"
+            echo "Deploy: $DEPLOY"
+            echo "Live assets: $LIVE"
+            echo "URL: $SITE_URL"
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > verification/deployment.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add verification/deployment.txt
+          git commit -m "Record Pages deployment verification [skip ci]" || exit 0
+          git push
+      - name: Enforce live website verification
+        if: steps.deployment.outcome != 'success' || steps.live.outcome != 'success'
+        run: exit 1
