@@ -2,121 +2,121 @@ TAP version 13
 # Subtest: unknown properties must not disappear silently
 ok 1 - unknown properties must not disappear silently
   ---
-  duration_ms: 2.386325
+  duration_ms: 1.662044
   type: 'test'
   ...
 # Subtest: maximum 128 layers round-trip
 ok 2 - maximum 128 layers round-trip
   ---
-  duration_ms: 13.814017
+  duration_ms: 9.98658
   type: 'test'
   ...
 # Subtest: creates distinct immutable elevation levels
 ok 3 - creates distinct immutable elevation levels
   ---
-  duration_ms: 2.763433
+  duration_ms: 2.167613
   type: 'test'
   ...
 # Subtest: offset and blur increase as elevation increases
 ok 4 - offset and blur increase as elevation increases
   ---
-  duration_ms: 0.473288
+  duration_ms: 0.353068
   type: 'test'
   ...
 # Subtest: generates deterministic editable palette
 ok 5 - generates deterministic editable palette
   ---
-  duration_ms: 1.121453
+  duration_ms: 0.900878
   type: 'test'
   ...
 # Subtest: rejects invalid elevation options
 ok 6 - rejects invalid elevation options
   ---
-  duration_ms: 0.52788
+  duration_ms: 0.389218
   type: 'test'
   ...
 # Subtest: box: serializer round-trip preserves supported values
 ok 7 - box: serializer round-trip preserves supported values
   ---
-  duration_ms: 6.130137
+  duration_ms: 4.305848
   type: 'test'
   ...
 # Subtest: text: serializer round-trip preserves supported values
 ok 8 - text: serializer round-trip preserves supported values
   ---
-  duration_ms: 1.700499
+  duration_ms: 0.708316
   type: 'test'
   ...
 # Subtest: drop: serializer round-trip preserves supported values
 ok 9 - drop: serializer round-trip preserves supported values
   ---
-  duration_ms: 0.688741
+  duration_ms: 0.567919
   type: 'test'
   ...
 # Subtest: parses CSS none
 ok 10 - parses CSS none
   ---
-  duration_ms: 0.25578
+  duration_ms: 0.203165
   type: 'test'
   ...
 # Subtest: rejects unsupported expressions without corrupting input
 ok 11 - rejects unsupported expressions without corrupting input
   ---
-  duration_ms: 0.768461
+  duration_ms: 0.573428
   type: 'test'
   ...
 # Subtest: undo/redo maintains independent immutable states
 ok 12 - undo/redo maintains independent immutable states
   ---
-  duration_ms: 0.451657
+  duration_ms: 0.310857
   type: 'test'
   ...
 # Subtest: history remains bounded
 ok 13 - history remains bounded
   ---
-  duration_ms: 0.342632
+  duration_ms: 0.245401
   type: 'test'
   ...
 # Subtest: default layer is immutable and valid
 ok 14 - default layer is immutable and valid
   ---
-  duration_ms: 1.198107
+  duration_ms: 0.748573
   type: 'test'
   ...
 # Subtest: rejects invalid values and unsupported combinations
 ok 15 - rejects invalid values and unsupported combinations
   ---
-  duration_ms: 0.808727
+  duration_ms: 0.519306
   type: 'test'
   ...
 # Subtest: layers are updated without mutating prior state
 ok 16 - layers are updated without mutating prior state
   ---
-  duration_ms: 1.202796
+  duration_ms: 0.902402
   type: 'test'
   ...
 # Subtest: add, reorder and remove layers
 ok 17 - add, reorder and remove layers
   ---
-  duration_ms: 1.125401
+  duration_ms: 0.867961
   type: 'test'
   ...
 # Subtest: serializes box shadow and skips disabled layers
 ok 18 - serializes box shadow and skips disabled layers
   ---
-  duration_ms: 0.576461
+  duration_ms: 0.357327
   type: 'test'
   ...
 # Subtest: serializes text and drop shadows using correct syntax
 ok 19 - serializes text and drop shadows using correct syntax
   ---
-  duration_ms: 0.267782
+  duration_ms: 0.204894
   type: 'test'
   ...
 # Subtest: limits layer count
 ok 20 - limits layer count
   ---
-  duration_ms: 0.494517
+  duration_ms: 0.316973
   type: 'test'
   ...
 1..20
@@ -127,4 +127,4 @@ ok 20 - limits layer count
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 146.280095
+# duration_ms 123.02958

@@ -1,0 +1,59 @@
+[2378:2399:1008/033502.122395:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2399:1008/033502.122934:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2399:1008/033502.130002:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2399:1008/033502.152000:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.353692:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2378:1008/033502.353745:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2399:1008/033502.353865:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2399:1008/033502.353879:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.354660:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2378:1008/033502.357253:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2399:1008/033502.357326:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.368549:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2378:1008/033502.368717:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2399:1008/033502.370099:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.373973:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2378:1008/033502.379212:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2378:1008/033502.379245:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+[2378:2399:1008/033502.379410:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.383621:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2378:2399:1008/033502.384670:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2378:2378:1008/033502.387093:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>UI verification</title>
+</head><body><div id="status" data-status="passed">PASS: UI interactions</div><iframe id="app" src="../index.html" style="width:1300px;height:900px"></iframe>
+<script type="module">
+const frame = document.querySelector("#app");
+const status = document.querySelector("#status");
+frame.addEventListener("load", () => {
+ try {
+  const doc = frame.contentDocument;
+  const click = id => doc.getElementById(id).click();
+  const code = () => doc.getElementById("code").textContent;
+  if (!code().includes("box-shadow:")) throw Error("initial CSS output missing");
+  const initial = code();
+  click("add");
+  if (!doc.getElementById("count").textContent.includes("2")) throw Error("add layer failed");
+  click("undo");
+  if (code() !== initial) throw Error("undo failed");
+  click("redo");
+  if (!doc.getElementById("count").textContent.includes("2")) throw Error("redo failed");
+  const input = doc.getElementById("import");
+  input.value = "text-shadow: 2px 3px 5px #336699;";
+  click("apply");
+  if (doc.getElementById("kind").value !== "text") throw Error("import did not switch mode");
+  if (!code().startsWith("text-shadow:")) throw Error("wrong import result");
+  click("theme");
+  if (!doc.documentElement.classList.contains("theme-light")) throw Error("theme failed");
+  const range = doc.getElementById("blur");
+  range.value = "45";
+  range.dispatchEvent(new Event("input",{bubbles:true}));
+  if (!code().includes("45px")) throw Error("range edit failed");
+  status.textContent = "PASS: UI interactions";
+  status.dataset.status = "passed";
+ } catch(error) {
+  status.textContent = "FAIL: " + error.message;
+  status.dataset.status = "failed";
+ }
+},{once:true});
+</script></body></html>
