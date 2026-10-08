@@ -7,7 +7,7 @@ export const SHADOW_KINDS = Object.freeze(["box", "text", "drop"]);
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
 const requireFinite = (value, name) => {
   if (!isFiniteNumber(value)) throw new TypeError(name + " must be a finite number");
-  return value;
+  return Object.is(value, -0) ? 0 : value;
 };
 const requireNumberAtLeast = (value, min, name) => {
   requireFinite(value, name);
