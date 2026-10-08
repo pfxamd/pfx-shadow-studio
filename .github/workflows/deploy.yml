@@ -50,7 +50,8 @@ jobs:
                curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}src/ui/app.js" -o /tmp/pfx-app.js &&
                curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}src/ui/style.css" -o /tmp/pfx-style.css &&
                curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' "${base}assets/pfx-logo.svg" -o /tmp/pfx-logo.svg &&
-               grep -q 'PFx Shadow Studio' /tmp/pfx-index.html &&
+               grep -q '<title>pfx shadow studio</title>' /tmp/pfx-index.html &&
+               grep -q '<span class="version">alpha 0.1</span>' /tmp/pfx-index.html &&
                grep -q 'createHistory' /tmp/pfx-app.js &&
                grep -q '\.workspace' /tmp/pfx-style.css &&
                cmp -s assets/pfx-logo.svg /tmp/pfx-logo.svg; then
