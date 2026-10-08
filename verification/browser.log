@@ -1,0 +1,78 @@
+[2148:2172:1008/033121.740693:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2172:1008/033121.752740:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2172:1008/033122.836488:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2172:1008/033123.117801:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033124.420260:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2148:1008/033124.420320:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2172:1008/033124.420330:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2172:1008/033124.420341:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033124.428862:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2148:1008/033124.487487:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2172:1008/033124.494911:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033124.751154:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2148:1008/033124.792234:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2172:1008/033124.792304:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033124.801109:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2148:1008/033124.989025:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+[2148:2148:1008/033124.993611:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2172:1008/033124.993785:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033125.083770:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[2148:2172:1008/033125.084087:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[2148:2148:1008/033125.101345:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>PASS — Browser Core Check</title>
+<style>body{font:15px system-ui;background:#14171d;color:#eef;padding:2rem;max-width:760px;margin:auto}pre{white-space:pre-wrap}#result{padding:1rem;background:#222832;border-radius:10px}.demo{background:white;width:140px;height:80px;border-radius:14px;margin:45px;color:#111;padding:12px}</style>
+</head>
+<body>
+<h1>PFx Shadow Studio — Browser Core Check</h1>
+<p>Native browser smoke checks. No external scripts.</p>
+<pre id="result" data-status="passed">PASS box roundtrip
+PASS text roundtrip
+PASS drop roundtrip
+PASS native CSS rendering
+PASS history undo/redo
+PASS elevation output
+
+6/6 passed</pre><div class="demo" id="demo" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 24px 0px;">Shadow preview</div>
+<script type="module">
+import { createShadow, createLayer, serializeDeclaration, serializeShadow, updateLayer } from "../src/core/shadow.js";
+import { parseShadow } from "../src/core/parse.js";
+import { createHistory, commitHistory, undo, redo } from "../src/core/history.js";
+import { createElevationPalette } from "../src/core/elevation.js";
+const out = document.querySelector("#result");
+const tests = [];
+const check = (name, fn) => {
+  try { fn(); tests.push("PASS " + name); }
+  catch (e) { tests.push("FAIL " + name + ": " + e.message); }
+};
+for (const kind of ["box", "text", "drop"]) {
+  check(kind + " roundtrip", () => {
+    const input = createShadow(kind, [createLayer({ x: -2, y: 3, blur: 8, color: "#336699", alpha: 0.3 })]);
+    const output = parseShadow(kind, serializeDeclaration(input));
+    if (JSON.stringify(input) !== JSON.stringify(output)) throw Error("roundtrip mismatch");
+  });
+}
+check("native CSS rendering", () => {
+  const shadow = createShadow();
+  const el = document.querySelector("#demo");
+  el.style.boxShadow = serializeShadow(shadow);
+  if (getComputedStyle(el).boxShadow === "none") throw Error("box-shadow not rendered");
+});
+check("history undo/redo", () => {
+  const a = createHistory(createShadow());
+  const b = commitHistory(a, updateLayer(a.present, 0, { x: 17 }));
+  if (undo(b).present.layers[0].x !== 0 || redo(undo(b)).present.layers[0].x !== 17) {
+    throw Error("history mismatch");
+  }
+});
+check("elevation output", () => {
+  if (createElevationPalette({levels: 8}).length !== 8) throw Error("incorrect elevation count");
+});
+const failures = tests.filter(s => s.startsWith("FAIL")).length;
+out.textContent = tests.join("\n") + "\n\n" + (tests.length-failures) + "/" + tests.length + " passed";
+out.dataset.status = failures ? "failed" : "passed";
+document.title = failures ? "FAIL — Browser Core Check" : "PASS — Browser Core Check";
+</script>
+
+</body></html>
