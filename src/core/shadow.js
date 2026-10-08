@@ -30,7 +30,11 @@ export function createLayer(values = {}) {
   if (values === null || typeof values !== "object" || Array.isArray(values)) {
     throw new TypeError("layer values must be an object");
   }
-  const allowed = new Set(["x", "y", "blur", "spread", "color", "alpha", "inset", "enabled"]);\n  for (const key of Object.keys(values)) {\n    if (!allowed.has(key)) throw new TypeError("unknown layer property: " + key);\n  }\n  const { x = 0, y = 8, blur = 24, spread = 0, color = "#000000",
+  const allowed = new Set(["x", "y", "blur", "spread", "color", "alpha", "inset", "enabled"]);
+  for (const key of Object.keys(values)) {
+    if (!allowed.has(key)) throw new TypeError("unknown layer property: " + key);
+  }
+  const { x = 0, y = 8, blur = 24, spread = 0, color = "#000000",
     alpha = 0.15, inset = false, enabled = true } = values;
   if (typeof inset !== "boolean" || typeof enabled !== "boolean") {
     throw new TypeError("inset and enabled must be booleans");
