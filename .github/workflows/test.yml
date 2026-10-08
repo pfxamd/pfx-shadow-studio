@@ -1,21 +1,62 @@
-name: Core tests
+name: Core verification
 
 on:
   push:
+    paths-ignore:
+      - 'verification/**'
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run native tests
-        run: node --test
+      - name: Native unit, boundary and stress tests
+        id: native
+        continue-on-error: true
+        run: node --test > native-tests.log 2>&1
+      - name: Browser smoke tests in headless Chrome
+        id: browser
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:8765/test/browser.html > /dev/null; then break; fi
+            sleep 1
+          done
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8765/test/browser.html > browser-tests.log 2>&1
+          grep -q '6/6 passed' browser-tests.log
+          ! grep -q 'FAIL ' browser-tests.log
+      - name: Publish verification results
+        if: always() && github.event_name == 'push'
+        shell: bash
+        env:
+          NATIVE: ${{ steps.native.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+        run: |
+          mkdir -p verification
+          {
+            echo "Commit: $GITHUB_SHA"
+            echo "Native tests: $NATIVE"
+            echo "Browser tests: $BROWSER"
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > verification/latest.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add verification/latest.txt
+          git commit -m "Record core verification status [skip ci]" || exit 0
+          git push
+      - name: Enforce verification gate
+        if: steps.native.outcome != 'success' || steps.browser.outcome != 'success'
+        run: exit 1
