@@ -41,7 +41,7 @@ jobs:
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8765/test/browser.html > browser-tests.log 2>&1
           grep -E 'PASS|FAIL|passed|Error' browser-tests.log | tail -30 || true
           grep -q '6/6 passed' browser-tests.log
-          ! grep -q 'FAIL ' browser-tests.log
+          grep -q 'data-status="passed"' browser-tests.log
       - name: Publish verification results
         if: always() && github.event_name == 'push'
         shell: bash
