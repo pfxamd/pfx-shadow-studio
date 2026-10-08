@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>UI verification</title>
+<body><div id="status">PENDING</div><iframe id="app" src="../index.html" style="width:1300px;height:900px"></iframe>
+<script type="module">
+const frame = document.querySelector("#app");
+const status = document.querySelector("#status");
+frame.addEventListener("load", () => {
+ try {
+  const doc = frame.contentDocument;
+  const click = id => doc.getElementById(id).click();
+  const code = () => doc.getElementById("code").textContent;
+  if (!code().includes("box-shadow:")) throw Error("initial CSS output missing");
+  const initial = code();
+  click("add");
+  if (!doc.getElementById("count").textContent.includes("2")) throw Error("add layer failed");
+  click("undo");
+  if (code() !== initial) throw Error("undo failed");
+  click("redo");
+  if (!doc.getElementById("count").textContent.includes("2")) throw Error("redo failed");
+  const input = doc.getElementById("import");
+  input.value = "text-shadow: 2px 3px 5px #336699;";
+  click("apply");
+  if (doc.getElementById("kind").value !== "text") throw Error("import did not switch mode");
+  if (!code().startsWith("text-shadow:")) throw Error("wrong import result");
+  click("theme");
+  if (!doc.documentElement.classList.contains("theme-light")) throw Error("theme failed");
+  const range = doc.getElementById("blur");
+  range.value = "45";
+  range.dispatchEvent(new Event("input",{bubbles:true}));
+  if (!code().includes("45px")) throw Error("range edit failed");
+  status.textContent = "PASS: UI interactions";
+  status.dataset.status = "passed";
+ } catch(error) {
+  status.textContent = "FAIL: " + error.message;
+  status.dataset.status = "failed";
+ }
+},{once:true});
+</script></body></html>
