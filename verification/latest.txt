@@ -1,6 +1,6 @@
-Commit: 449824fff8bd68865de6acfd842e3b4b06f965c3
+Commit: 05387191dd5728423a592e9458c649c576ccb46e
 Native tests: success
 Browser tests: success
 UI tests: success
-Run: https://github.com/pfxamd/pfx-shadow-studio/actions/runs/39607237533
-Timestamp: 2026-10-21T13:21:25Z
+Run: https://github.com/pfxamd/pfx-shadow-studio/actions/runs/39642844068
+Timestamp: 2026-10-21T17:20:33Z
