@@ -1,0 +1,23 @@
+{
+  "product": "PFx Shadow Studio",
+  "channel": "Alpha",
+  "baseline": "7eb62eeb2e12242f63936fdfe55b893aad4b445f",
+  "baseVersion": "0.1.0",
+  "sourcePaths": [
+    "src",
+    "app",
+    "apps",
+    "public",
+    "assets",
+    "index.html",
+    "diagnostics",
+    "scripts",
+    "release.config.json",
+    "vite.config.ts",
+    "vite.config.js",
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    ".github/workflows"
+  ]
+}
